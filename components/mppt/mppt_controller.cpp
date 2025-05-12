@@ -51,12 +51,12 @@ namespace esphome
 
             if (this->output_pin_ != nullptr)
             {
-                this->output_pin_->write_state(duty);
+                this->output_pin_->set_level(duty);
             }
 
             if (this->duty_sensor_ != nullptr)
             {
-                this->duty_sensor_->publish_state(duty);
+                this->duty_sensor_->publish_state(duty * 100.0f);
             }
 
             if (this->power_sensor_ != nullptr)
@@ -65,7 +65,7 @@ namespace esphome
             }
         }
 
-        void MPPTController::mppt_algorithm_()
+        float MPPTController::mppt_algorithm_()
         {
             float voltage = this->voltage_sensor_->state;
             float current = this->current_sensor_->state;
@@ -84,7 +84,9 @@ namespace esphome
 
             float duty_cycle = voltage + (this->increase_ ? this->perturb_amount_ : -this->perturb_amount_);
             duty_cycle = std::max(0.0f, std::min(1.0f, duty_cycle));
+            this->duty_cycle_ = duty_cycle;
             return duty_cycle;
         }
+
     }
 }

@@ -56,7 +56,7 @@ namespace esphome
 
             if (this->duty_sensor_ != nullptr)
             {
-                this->duty_sensor_->publish_state(duty * 100.0f);
+                this->duty_sensor_->publish_state(duty);
             }
 
             if (this->power_sensor_ != nullptr)
@@ -84,7 +84,6 @@ namespace esphome
 
             float duty_cycle = voltage + (this->increase_ ? this->perturb_amount_ : -this->perturb_amount_);
             duty_cycle = std::max(0.0f, std::min(1.0f, duty_cycle));
-            this->duty_cycle_ = duty_cycle;
             return duty_cycle;
         }
 

@@ -31,7 +31,6 @@ namespace esphome
             float last_power_{0};
             float last_voltage_{0};
             float perturb_amount_{0.01};
-            float duty_cycle_{0};
             bool increase_{true};
 
             float mppt_algorithm_(); // Fixed signature here

@@ -18,8 +18,6 @@ namespace esphome
             void set_power_sensor(sensor::Sensor *power_sensor);
             void set_duty_sensor(sensor::Sensor *duty_sensor);
 
-            float get_duty_cycle() const { return this->duty_cycle_ * 100.0f; }
-
         private:
             uint8_t address_;
             sensor::Sensor *voltage_sensor_{nullptr};

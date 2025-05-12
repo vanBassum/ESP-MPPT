@@ -3,7 +3,7 @@ import esphome.config_validation as cv
 from esphome.components import sensor, output
 from esphome.const import CONF_ID, CONF_UPDATE_INTERVAL
 
-DEPENDENCIES = ['i2c']
+DEPENDENCIES = []
 AUTO_LOAD = ['sensor', 'output']
 
 mppt_ns = cg.esphome_ns.namespace('mppt')

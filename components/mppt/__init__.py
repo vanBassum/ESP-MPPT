@@ -26,11 +26,18 @@ CONFIG_SCHEMA = cv.Schema({
 
 def to_code(config):
     mppt = cg.new_Pvariable(config[CONF_ID])
-    cg.add(mppt.set_voltage_sensor(config[CONF_VOLTAGE_SENSOR]))
-    cg.add(mppt.set_current_sensor(config[CONF_CURRENT_SENSOR]))
-    cg.add(mppt.set_output_pin(config[CONF_OUTPUT_PIN]))
-    cg.add(mppt.set_power_sensor(config[CONF_POWER_SENSOR]))
+
+    # Get the sensor variables explicitly
+    voltage_sensor = yield cg.get_variable(config[CONF_VOLTAGE_SENSOR])
+    current_sensor = yield cg.get_variable(config[CONF_CURRENT_SENSOR])
+    power_sensor = yield cg.get_variable(config[CONF_POWER_SENSOR])
+    output_pin = yield cg.get_variable(config[CONF_OUTPUT_PIN])
+
+    # Assign sensors and output pin to the MPPT controller
+    cg.add(mppt.set_voltage_sensor(voltage_sensor))
+    cg.add(mppt.set_current_sensor(current_sensor))
+    cg.add(mppt.set_power_sensor(power_sensor))
+    cg.add(mppt.set_output_pin(output_pin))
     cg.add(mppt.set_update_interval(config[CONF_UPDATE_INTERVAL]))
     cg.add(mppt.setup())
     cg.register_component(mppt, config)
-

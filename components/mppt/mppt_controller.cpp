@@ -6,9 +6,6 @@ namespace esphome
     namespace mppt
     {
 
-        MPPTController::MPPTController(uint8_t address, uint32_t update_interval)
-            : PollingComponent(update_interval), address_(address) {}
-
         void MPPTController::setup()
         {
             ESP_LOGI("MPPTController", "Setting up MPPT Controller...");

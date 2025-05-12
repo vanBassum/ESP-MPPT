@@ -9,8 +9,6 @@ namespace esphome
         class MPPTController : public PollingComponent
         {
         public:
-            MPPTController(uint8_t address, uint32_t update_interval = 1000);
-
             void setup() override;
             void update() override;
 

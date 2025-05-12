@@ -31,6 +31,11 @@ namespace esphome
             this->power_sensor_ = power_sensor;
         }
 
+        void MPPTController::set_duty_sensor(sensor::Sensor *duty_sensor)
+        {
+            this->duty_sensor_ = duty_sensor;
+        }
+
         void MPPTController::update()
         {
             if (this->voltage_sensor_ == nullptr || this->current_sensor_ == nullptr)
@@ -42,13 +47,22 @@ namespace esphome
             float voltage = this->voltage_sensor_->state;
             float current = this->current_sensor_->state;
             float power = voltage * current;
+            float duty = this->mppt_algorithm_();
+
+            if (this->output_pin_ != nullptr)
+            {
+                this->output_pin_->write_state(duty);
+            }
+
+            if (this->duty_sensor_ != nullptr)
+            {
+                this->duty_sensor_->publish_state(duty);
+            }
 
             if (this->power_sensor_ != nullptr)
             {
                 this->power_sensor_->publish_state(power);
             }
-
-            this->mppt_algorithm_();
         }
 
         void MPPTController::mppt_algorithm_()
@@ -68,13 +82,9 @@ namespace esphome
                 this->increase_ = !this->increase_;
             }
 
-            if (this->output_pin_ != nullptr)
-            {
-                float duty_cycle = voltage + (this->increase_ ? this->perturb_amount_ : -this->perturb_amount_);
-                duty_cycle = std::max(0.0f, std::min(1.0f, duty_cycle));
-                this->output_pin_->set_level(duty_cycle);
-            }
+            float duty_cycle = voltage + (this->increase_ ? this->perturb_amount_ : -this->perturb_amount_);
+            duty_cycle = std::max(0.0f, std::min(1.0f, duty_cycle));
+            return duty_cycle;
         }
-
     }
 }
